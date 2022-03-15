@@ -1,59 +1,72 @@
 package com.example.thecatapi
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import java.io.FileNotFoundException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [UploadFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UploadFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    lateinit var root: View
+    lateinit var image_upload: ImageView
+    lateinit var button: Button
+    var check = false
+    lateinit var imageUri1: Uri
+    lateinit var add_linear: LinearLayout
+    val PICK_IMAGE = 121
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload, container, false)
+    ): View {
+        root = inflater.inflate(R.layout.fragment_upload, container, false)
+        initViews()
+        return root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UploadFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UploadFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun initViews() {
+        image_upload = root.findViewById<ImageView>(R.id.image_upload)
+         button = root.findViewById<Button>(R.id.upload_btn)
+        button.setOnClickListener{
+            if (check){
+
             }
+        }
+        add_linear = root.findViewById(R.id.add_liner)
+        image_upload.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            try {
+                val imageUri: Uri = data!!.data!!
+                imageUri1 = imageUri
+                button.visibility = View.VISIBLE
+                check =true
+                add_linear.visibility = View.GONE
+                image_upload.setImageURI(imageUri)
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                check = false
+                Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            check = false
+            Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+        }
     }
 }
