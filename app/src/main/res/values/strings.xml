@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TheCatApi</string>
+    <string name="home">Home</string>
+    <string name="my_photo">My Photo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string-array name="catNames">
+        <item>Barsik</item>
+        <item>Мурзик</item>
+        <item>Васька</item>
+        <item>Рыжик</item>
+    </string-array>
+</resources>
