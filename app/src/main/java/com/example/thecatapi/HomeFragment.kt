@@ -1,5 +1,6 @@
 package com.example.thecatapi
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -48,6 +49,7 @@ class HomeFragment : Fragment() {
         lottie_animation.visibility = View.VISIBLE
         val apiClient = ApiClient(requireContext())
         apiClient.apiServise.getAll(20,counter).enqueue(object : Callback<ArrayList<ResponseItem>>{
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<ArrayList<ResponseItem>>,
                 response: Response<ArrayList<ResponseItem>>
